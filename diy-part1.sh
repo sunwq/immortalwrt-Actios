@@ -24,5 +24,10 @@ echo 'src-git store https://github.com/linkease/istore.git;main' >> feeds.conf.d
 # 调试
 # sed -i 's|src-git-full openstick https://github.com/lkiuyu/openstick-feeds.git|src-git-full openstick https://github.com/xuxin1955/openstick-feeds|g' feeds.conf.default
 
-
-
+# 注入 wcn36xx STA+AP 并发补丁（取自 lkiuyu/immortalwrt 2026-05-11）
+WCN_DIR=package/kernel/mac80211/patches/ath
+mkdir -p $WCN_DIR
+for p in 995-wcn36xx-sessionized-concurrency-basics 997-wcn36xx-ap-group-key-swcrypto 998-wcn36xx-disable-ps-when-ap-active 999-wcn36xx-sta-ap-concurrency; do
+  curl -fsSL -o $WCN_DIR/$p.patch "https://raw.githubusercontent.com/lkiuyu/immortalwrt/b6ed3ec634a93a2cabb5bf39baec67b6f9e39aaf/package/kernel/mac80211/patches/ath/$p.patch"
+  [ -s $WCN_DIR/$p.patch ] || echo "警告: $p 下载失败"
+done
